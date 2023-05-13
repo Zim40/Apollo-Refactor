@@ -7,7 +7,7 @@ const path = require('path');
 // Deconstructed schema folder to import typeDefs and Resolvers/ (query data and "mutations").
 const { typeDefs, resolvers } = ('./schemas');
 const db = require('./config/connection');
-const routes = require('./routes');
+
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -46,6 +46,8 @@ const startApolloServer = async () => {
   });
 };
 
+// Call startApolloServer() function to activate server. 
+startApolloServer();
 
 
-// app.use(routes);
+
