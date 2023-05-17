@@ -5,7 +5,7 @@ const { ApolloServer } = require('apollo-server-express');
 const path = require('path');
 
 // Deconstructed schema folder to import typeDefs and Resolvers/ (query data and "mutations").
-const { typeDefs, resolvers } = ('./schemas');
+const { typeDefs, resolvers } = require('./schemas/index');
 const db = require('./config/connection');
 
 const { authMiddleware } = require('./utils/auth');

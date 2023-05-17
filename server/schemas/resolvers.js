@@ -40,7 +40,7 @@ const resolvers = {
         console.log(err, "There has been an internal issue!");
       }
     },
-    createUser: async (parent, { username, email, password }) => {
+    addUser: async (parent, { username, email, password }) => {
       try {
         const newUser = await User.create({ username, email, password });
         const token = signToken(newUser);
@@ -49,9 +49,9 @@ const resolvers = {
         console.log(err);
       }
     },
-    savebook: async (
+    saveBook: async (
       parent,
-      { title, author, description, bookId, image, link },
+      { input },
       context
     ) => {
       try {
@@ -61,12 +61,7 @@ const resolvers = {
             { _id: userId },
             {
               $addToSet: {
-                savedBooks: title,
-                author,
-                description,
-                bookId,
-                image,
-                link,
+                savedBooks: input,
               },
             },
             {
