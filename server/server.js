@@ -20,6 +20,8 @@ const server = new ApolloServer({
   context: authMiddleware,
 });
 
+
+
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
@@ -33,23 +35,23 @@ app.get('/', (req, res) => {
 });
 
 // Activated Apollo server while also activating middleware (middleware eventually will be JWT token access for each request).
-const startApolloServer = async () => {
+const startApolloServer = async (typeDefs, resolvers) => {
   await server.start();
-
   server.applyMiddleware({ app });
+  
 // opening MongoDb connection listening to Heroku chosen port, if not that port then PORT: 3001
   db.once("open", () => {
     app.listen(PORT, () => {
       console.log(`🌍 Now listening on localhost:${PORT}`);
       console.log(
-        `Use graphQL at https://localhost:${PORT}${server.graphqlPath}`
+        `Use graphQL at http://localhost:${PORT}${server.graphqlPath}`
       );
     });
   });
 };
 
 // Call startApolloServer() function to activate server. 
-startApolloServer();
+startApolloServer(typeDefs, resolvers);
 
 
 

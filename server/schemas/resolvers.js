@@ -7,12 +7,10 @@ const resolvers = {
   Query: {
     me: async (parent, args, context) => {
       try {
-        const userId = context.user._id;
-        if (!userId) {
-          throw new AuthenticationError("Please create an Account!");
-        }
-
-        return User.findOne({ _id: userId });
+       if (context.user) {
+        const userData = await User.findOne({ _id: context.user._id}).select('__v -password');
+        return userData;
+       }
       } catch {
         throw new AuthenticationError(
           "We had trouble Retrieving your Profile. Please try again"
@@ -40,9 +38,9 @@ const resolvers = {
         console.log(err, "There has been an internal issue!");
       }
     },
-    addUser: async (parent, { username, email, password }) => {
+    addUser: async (parent, args) => {
       try {
-        const newUser = await User.create({ username, email, password });
+        const newUser = await User.create(args);
         const token = signToken(newUser);
         return { token, newUser };
       } catch (err) {
@@ -51,17 +49,17 @@ const resolvers = {
     },
     saveBook: async (
       parent,
-      { input },
+      { newBook },
       context
     ) => {
       try {
-        const userId = context.user._id;
-        if (userId) {
+        
+        if (context.user) {
           return User.findOneAndUpdate(
-            { _id: userId },
+            { _id: context.user._id },
             {
-              $addToSet: {
-                savedBooks: input,
+              $push: {
+                savedBooks: newBook,
               },
             },
             {
@@ -78,12 +76,12 @@ const resolvers = {
       }
     },
     removeBook: async (parent, { bookId }, context) => {
-      const user = context.user._id;
-      if (user) {
+     
+      if (context.user) {
         try {
           return User.findOneAndUpdate(
             { _id: context.user._id },
-            { $pull: { savedBooks: bookId } },
+            { $pull: { savedBooks: { bookId } } },
             { new: true }
           );
         } catch (err) {

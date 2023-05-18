@@ -80,8 +80,8 @@ const SearchBooks = () => {
       // if (!response.ok) {
       //   throw new Error('something went wrong!');
       // }
-      const { data } = await saveBook({
-        variables: {savedBooks: { ...bookToSave} },
+      const {data} = await saveBook({
+        variables: {newBook: {...bookToSave}},
       });
 
       // if book successfully saves to user's account, save book id to state

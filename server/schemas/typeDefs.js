@@ -8,26 +8,26 @@ const typeDefs = gql`
     _id: ID!
     username: String!
     email: String!
-    bookCount: String
+    bookCount: Int
     savedbooks: [Book]
   }
   """
   Defines Book Data
   """
   type Book {
-    authors: [String]!
-    description: String!
-    bookId: String!
+    bookId: ID!
+    authors: [String]
+    description: String
     image: String
     link: String
-    title: String!
+    title: String
   }
   """
   Defines Auth Data
   """
   type Auth {
-    token: String!
-    user: User!
+    token: ID!
+    user: User
   }
 
   type Query {
@@ -35,10 +35,10 @@ const typeDefs = gql`
   }
 
   input SaveBook {
-    author: [String]!
-    description: String!
-    title: String!
-    bookId: String!
+    bookId: String
+    authors: [String]
+    description: String
+    title: String
     image: String
     link: String
   }
